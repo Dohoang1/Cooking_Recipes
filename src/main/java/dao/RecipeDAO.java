@@ -20,6 +20,7 @@ public class RecipeDAO {
     private static final String SELECT_ALL_RECIPES_BY_ID = "SELECT * FROM recipes WHERE id LIKE ?";
     private static final String SORT_ALL_RECIPES_BY_NAME = "SELECT * FROM recipes ORDER BY name";
     private static final String SORT_ALL_RECIPES_BY_ID = "SELECT * FROM recipes ORDER BY id";
+    private static final String SELECT_ALL_RECIPES_BY_INGREDIENT = "SELECT * FROM recipes WHERE ingredient LIKE ?";
 
     public RecipeDAO() {
     }
@@ -144,6 +145,26 @@ public class RecipeDAO {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_RECIPES_BY_ID)) {
             preparedStatement.setString(1, idParam + "%");
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String cooktime = rs.getString("cooktime");
+                String ingredient = rs.getString("ingredient");
+                String inscription = rs.getString("inscription");
+                String image = rs.getString("image");
+                recipes.add(new Recipe(id, name, cooktime, ingredient, inscription, image));
+            }
+        }
+        return recipes;
+    }
+
+    public List<Recipe> searchRecipeByIngredient(String ingredientParam) throws SQLException {
+        List<Recipe> recipes = new ArrayList<>();
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_RECIPES_BY_INGREDIENT)) {
+            preparedStatement.setString(1, "%" + ingredientParam + "%");
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {

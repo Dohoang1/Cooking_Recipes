@@ -140,6 +140,8 @@ public class RecipeServlet extends HttpServlet {
                 return recipeDAO.searchRecipesByName(keyword);
             case "id":
                 return recipeDAO.searchRecipesById(keyword);
+            case "ingredient":
+                return recipeDAO.searchRecipeByIngredient(keyword);
             default:
                 return recipeDAO.selectAllRecipes();
         }

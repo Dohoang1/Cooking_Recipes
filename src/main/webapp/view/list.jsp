@@ -11,7 +11,6 @@
         }
         .recipe-content {
             white-space: pre-wrap;
-            max-height: 150px;
             overflow-y: auto;
         }
     </style>
@@ -44,13 +43,13 @@
         </div>
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <!-- Các mục menu khác nếu cần -->
             </ul>
             <form class="d-flex align-items-center me-2" action="${pageContext.request.contextPath}/recipes" method="get">
                 <span class="me-2">Tìm kiếm</span>
                 <select class="form-select me-2" name="searchtype" style="width: auto;">
                     <option value="id">ID</option>
                     <option value="name">Tên Món Ăn</option>
+                    <option value="ingredient">Nguyên Liệu</option>
                 </select>
                 <input class="form-control me-2" type="search" placeholder="Nhập từ khóa" name="keyword" style="width: auto;">
                 <button class="btn btn-outline-success" type="submit">Tìm</button>
@@ -79,7 +78,7 @@
             <tr>
                 <th>ID</th>
                 <th>Tên Món Ăn</th>
-                <th>Thời Gian Nấu</th>
+                <th>Thời Gian</th>
                 <th>Nguyên Liệu</th>
                 <th>Mô Tả</th>
                 <th>Ảnh</th>
