@@ -26,7 +26,7 @@
     <a href="recipes" class="btn btn-outline-warning btn-lg pacifico-font position-relative px-5 py-3">
         <span class="position-absolute start-0 top-50 translate-middle-y ms-2">&gt;&gt;</span>
         Truy cập ngay
-        <span class="position-absolute end-0 top-50 translate-middle-y me-2">&gt;&gt;</span>
+        <span class="position-absolute end-0 top-50 translate-middle-y me-2"><<</span>
     </a>
 </div>
 

@@ -14,7 +14,7 @@
 <div class="container mt-5">
     <h1 class="text-center mb-4">Quản Lý Công Thức Nấu Ăn</h1>
     <div class="text-center mb-4">
-        <a href="recipes?action=recipes" class="btn btn-primary">Danh Sách Công Thức</a>
+        <a href="recipes?action=recipes" class="btn btn-primary">Quay Lại Danh Sách</a>
     </div>
 
     <div class="row justify-content-center">

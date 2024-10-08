@@ -36,4 +36,20 @@ public class AdminDAO {
         }
         return status;
     }
+
+    public boolean validateUser(String username, String password) {
+        boolean status = false;
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection
+                     .prepareStatement("select * from users where username = ? and password = ?")) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            status = rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return status;
+    }
 }

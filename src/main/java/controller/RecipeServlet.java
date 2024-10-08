@@ -2,6 +2,7 @@ package controller;
 
 import dao.RecipeDAO;
 import model.Recipe;
+import model.SuggestedRecipe;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet(name = "RecipeServlet", urlPatterns = "/recipes")
+@WebServlet(name = "RecipeServlet", urlPatterns = {"/recipes", "/suggestRecipe", "/approveSuggestedRecipes"})
 public class RecipeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private RecipeDAO recipeDAO;
@@ -27,9 +28,7 @@ public class RecipeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-
         String action = request.getParameter("action");
-
         if (action == null) {
             action = "";
         }
@@ -40,6 +39,12 @@ public class RecipeServlet extends HttpServlet {
                     break;
                 case "edit":
                     updateRecipe(request, response);
+                    break;
+                case "suggestRecipe":
+                    suggestRecipe(request, response);
+                    break;
+                case "approveSuggestedRecipe":
+                    approveSuggestedRecipe(request, response);
                     break;
             }
         } catch (SQLException ex) {
@@ -74,6 +79,19 @@ public class RecipeServlet extends HttpServlet {
                     break;
                 case "delete":
                     deleteRecipe(request, response);
+                    break;
+                case "details":
+                    showRecipeDetails(request, response);
+                    break;
+                case "suggestRecipe":
+                    showSuggestRecipeForm(request, response);
+                    break;
+                case "approveSuggestedRecipes":
+                    if (!isAdminLoggedIn(request)) {
+                        response.sendRedirect("login.jsp");
+                        return;
+                    }
+                    showApproveSuggestedRecipesForm(request, response);
                     break;
                 default:
                     listRecipes(request, response);
@@ -203,5 +221,60 @@ public class RecipeServlet extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         recipeDAO.deleteRecipe(id);
         response.sendRedirect("recipes");
+    }
+
+    private void showSuggestRecipeForm(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("view/suggestRecipe.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void suggestRecipe(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        String name = request.getParameter("name");
+        String cooktime = request.getParameter("cooktime");
+        String ingredient = request.getParameter("ingredient");
+        String inscription = request.getParameter("inscription");
+        String image = request.getParameter("image");
+        String suggestedBy = (String) request.getSession().getAttribute("user");
+
+        SuggestedRecipe newRecipe = new SuggestedRecipe(name, cooktime, ingredient, inscription, image, suggestedBy);
+        recipeDAO.insertSuggestedRecipe(newRecipe);
+        response.sendRedirect("recipes");
+    }
+
+    private void showApproveSuggestedRecipesForm(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, ServletException, IOException {
+        List<SuggestedRecipe> suggestedRecipes = recipeDAO.selectAllSuggestedRecipes();
+        request.setAttribute("suggestedRecipes", suggestedRecipes);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("view/approveSuggestedRecipes.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void showRecipeDetails(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Recipe recipe = recipeDAO.selectRecipe(id);
+        request.setAttribute("recipe", recipe);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("view/recipeDetails.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void approveSuggestedRecipe(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String status = request.getParameter("status");
+
+        SuggestedRecipe suggestedRecipe = recipeDAO.selectSuggestedRecipe(id);
+        if (suggestedRecipe != null) {
+            if ("approved".equals(status)) {
+                Recipe newRecipe = new Recipe(suggestedRecipe.getName(), suggestedRecipe.getCooktime(),
+                        suggestedRecipe.getIngredient(), suggestedRecipe.getInscription(), suggestedRecipe.getImage());
+                recipeDAO.insertRecipe(newRecipe);
+            }
+
+            recipeDAO.updateSuggestedRecipeStatus(id, status);
+        }
+        response.sendRedirect("recipes?action=approveSuggestedRecipes");
     }
 }

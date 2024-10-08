@@ -24,17 +24,24 @@
         </button>
         <div class="d-flex align-items-center">
             <c:choose>
-                <c:when test="${empty sessionScope.admin}">
-                    <a href="${pageContext.request.contextPath}/login" class="btn btn-outline-primary">Đăng nhập Admin</a>
+                <c:when test="${empty sessionScope.admin && empty sessionScope.user}">
+                    <a href="${pageContext.request.contextPath}/login" class="btn btn-outline-primary">Đăng nhập</a>
                 </c:when>
                 <c:otherwise>
                     <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                ${sessionScope.admin}
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                ${not empty sessionScope.admin ? sessionScope.admin : sessionScope.user}
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/recipes?action=create">Thêm Công Thức Mới</a></li>
-                            <li><hr class="dropdown-divider"></li>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <c:if test="${not empty sessionScope.admin}">
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/recipes?action=create">Thêm Công Thức Mới</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/recipes?action=approveSuggestedRecipes">Duyệt Công Thức Đề Xuất</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                            </c:if>
+                            <c:if test="${not empty sessionScope.user}">
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/recipes?action=suggestRecipe">Đề Xuất Công Thức</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                            </c:if>
                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
                         </ul>
                     </div>
@@ -86,7 +93,6 @@
                     <th>Thao Tác</th>
                 </c:if>
             </tr>
-            </thead>
             <tbody>
             <c:forEach var="recipe" items="${listRecipe}">
                 <tr>
@@ -102,6 +108,12 @@
                         <td>
                             <a href="${pageContext.request.contextPath}/recipes?action=edit&id=${recipe.id}" class="btn btn-sm btn-primary">Sửa</a>
                             <a href="${pageContext.request.contextPath}/recipes?action=delete&id=${recipe.id}" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa công thức này?')">Xóa</a>
+                            <a href="${pageContext.request.contextPath}/recipes?action=details&id=${recipe.id}" class="btn btn-sm btn-info">Chi Tiết</a>
+                        </td>
+                    </c:if>
+                    <c:if test="${not empty sessionScope.user}">
+                        <td>
+                            <a href="${pageContext.request.contextPath}/recipes?action=details&id=${recipe.id}" class="btn btn-sm btn-info">Chi Tiết</a>
                         </td>
                     </c:if>
                 </tr>

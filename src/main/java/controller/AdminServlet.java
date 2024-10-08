@@ -23,6 +23,10 @@ public class AdminServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("admin", username);
             response.sendRedirect("recipes");
+        } else if (adminDAO.validateUser(username, password)) {
+            HttpSession session = request.getSession();
+            session.setAttribute("user", username);
+            response.sendRedirect("recipes");
         } else {
             request.setAttribute("errorMessage", "Tên đăng nhập hoặc mật khẩu không đúng");
             RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");

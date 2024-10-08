@@ -1,6 +1,7 @@
 package dao;
 
 import model.Recipe;
+import model.SuggestedRecipe;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -21,6 +22,10 @@ public class RecipeDAO {
     private static final String SORT_ALL_RECIPES_BY_NAME = "SELECT * FROM recipes ORDER BY name";
     private static final String SORT_ALL_RECIPES_BY_ID = "SELECT * FROM recipes ORDER BY id";
     private static final String SELECT_ALL_RECIPES_BY_INGREDIENT = "SELECT * FROM recipes WHERE ingredient LIKE ?";
+    private static final String INSERT_SUGGESTED_RECIPE_SQL = "INSERT INTO suggested_recipes (name, cooktime, ingredient, inscription, image, suggested_by, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_ALL_SUGGESTED_RECIPES = "SELECT * FROM suggested_recipes WHERE status = 'pending'";
+    private static final String UPDATE_SUGGESTED_RECIPE_STATUS = "UPDATE suggested_recipes SET status = ? WHERE id = ?";
+    private static final String SELECT_SUGGESTED_RECIPE_BY_ID = "SELECT * FROM suggested_recipes WHERE id = ?";
 
     public RecipeDAO() {
     }
@@ -219,6 +224,73 @@ public class RecipeDAO {
         }
         return recipes;
     }
+
+    public void insertSuggestedRecipe(SuggestedRecipe recipe) throws SQLException {
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SUGGESTED_RECIPE_SQL)) {
+            preparedStatement.setString(1, recipe.getName());
+            preparedStatement.setString(2, recipe.getCooktime());
+            preparedStatement.setString(3, recipe.getIngredient());
+            preparedStatement.setString(4, recipe.getInscription());
+            preparedStatement.setString(5, recipe.getImage());
+            preparedStatement.setString(6, recipe.getSuggestedBy());
+            preparedStatement.setString(7, recipe.getStatus());
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    public List<SuggestedRecipe> selectAllSuggestedRecipes() throws SQLException {
+        List<SuggestedRecipe> suggestedRecipes = new ArrayList<>();
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_SUGGESTED_RECIPES)) {
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                SuggestedRecipe recipe = new SuggestedRecipe();
+                recipe.setId(rs.getInt("id"));
+                recipe.setName(rs.getString("name"));
+                recipe.setCooktime(rs.getString("cooktime"));
+                recipe.setIngredient(rs.getString("ingredient"));
+                recipe.setInscription(rs.getString("inscription"));
+                recipe.setImage(rs.getString("image"));
+                recipe.setSuggestedBy(rs.getString("suggested_by"));
+                recipe.setStatus(rs.getString("status"));
+                suggestedRecipes.add(recipe);
+            }
+        }
+        return suggestedRecipes;
+    }
+
+    public boolean updateSuggestedRecipeStatus(int id, String status) throws SQLException {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_SUGGESTED_RECIPE_STATUS)) {
+            statement.setString(1, status);
+            statement.setInt(2, id);
+            return statement.executeUpdate() > 0;
+        }
+    }
+
+    public SuggestedRecipe selectSuggestedRecipe(int id) throws SQLException {
+        SuggestedRecipe recipe = null;
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SUGGESTED_RECIPE_BY_ID)) {
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                String name = rs.getString("name");
+                String cooktime = rs.getString("cooktime");
+                String ingredient = rs.getString("ingredient");
+                String inscription = rs.getString("inscription");
+                String image = rs.getString("image");
+                String suggestedBy = rs.getString("suggested_by");
+                String status = rs.getString("status");
+                recipe = new SuggestedRecipe(id, name, cooktime, ingredient, inscription, image, suggestedBy);
+                recipe.setStatus(status);
+            }
+        }
+        return recipe;
+    }
+
 
     private void printSQLException(SQLException ex) {
         for (Throwable e : ex) {
