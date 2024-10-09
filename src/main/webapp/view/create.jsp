@@ -2,19 +2,53 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>Công Thức Nấu Ăn</title>
+    <title>Thêm Công Thức Nấu Ăn</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        body {
+            background-color: #FFF5E6;
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar {
+            background-color: #FF9800 !important;
+        }
+        .btn-custom-primary {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+            color: white;
+        }
+        .btn-custom-primary:hover {
+            background-color: #45a049;
+            border-color: #45a049;
+            color: white;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            background-color: #FF9800;
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
         .form-control {
-            white-space: pre-wrap;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
+<nav class="navbar navbar-expand navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="http://localhost:8080/recipes">
+            <img src="${pageContext.request.contextPath}/logo.png" alt="Logo" class="d-inline-block align-top" style="height: 40px;">
+        </a>
+    </div>
+</nav>
+
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Quản Lý Công Thức Nấu Ăn</h1>
+    <h1 class="text-center mb-4" style="color: #FF5722;">Thêm Công Thức Nấu Ăn Mới</h1>
     <div class="text-center mb-4">
-        <a href="recipes?action=recipes" class="btn btn-primary">Quay Lại Danh Sách</a>
+        <a href="recipes?action=recipes" class="btn btn-custom-primary">Quay Lại Danh Sách</a>
     </div>
 
     <div class="row justify-content-center">
@@ -27,26 +61,26 @@
                     <form method="post">
                         <div class="mb-3">
                             <label for="name" class="form-label">Tên Món Ăn:</label>
-                            <input type="text" class="form-control" name="name" id="name">
+                            <input type="text" class="form-control" name="name" id="name" required>
                         </div>
                         <div class="mb-3">
                             <label for="cooktime" class="form-label">Thời Gian Nấu:</label>
-                            <input type="text" class="form-control" name="cooktime" id="cooktime">
+                            <input type="text" class="form-control" name="cooktime" id="cooktime" required>
                         </div>
                         <div class="mb-3">
                             <label for="ingredient" class="form-label">Nguyên Liệu:</label>
-                            <textarea class="form-control" name="ingredient" id="ingredient" rows="5"></textarea>
+                            <textarea class="form-control" name="ingredient" id="ingredient" rows="5" required></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="inscription" class="form-label">Mô Tả:</label>
-                            <textarea class="form-control" name="inscription" id="inscription" rows="5"></textarea>
+                            <textarea class="form-control" name="inscription" id="inscription" rows="5" required></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="image" class="form-label">Ảnh URL:</label>
                             <input type="text" class="form-control" name="image" id="image">
                         </div>
                         <div class="d-grid">
-                            <input type="submit" class="btn btn-primary" value="Lưu">
+                            <input type="submit" class="btn btn-custom-primary" value="Lưu">
                         </div>
                     </form>
                 </div>
@@ -54,5 +88,7 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
