@@ -76,75 +76,90 @@
         .recipe-content {
             white-space: pre-wrap;
         }
+        .form-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .form-container form {
+            display: flex;
+            align-items: center;
+        }
+        @media (max-width: 992px) {
+            .form-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .form-container form {
+                margin-bottom: 10px;
+            }
+        }
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="http://localhost:8080/recipes">
             <img src="${pageContext.request.contextPath}logo.png" alt="Logo" class="d-inline-block align-top">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            </ul>
-            <form class="d-flex align-items-center me-2" action="${pageContext.request.contextPath}/recipes" method="get">
-                <span class="me-2 text-white">Tìm kiếm</span>
-                <select class="form-select me-2" name="searchtype" style="width: auto;">
-                    <option value="id">ID</option>
-                    <option value="name">Tên Món Ăn</option>
-                    <option value="ingredient">Nguyên Liệu</option>
-                </select>
-                <input class="form-control me-2" type="search" placeholder="Nhập từ khóa" name="keyword" style="width: auto;">
-                <button class="btn btn-custom-primary" type="submit">Tìm</button>
-            </form>
-            <form class="d-flex align-items-center me-2" action="${pageContext.request.contextPath}/recipes" method="get">
-                <span class="me-2 text-white">Sắp xếp</span>
-                <select class="form-select me-2" name="sortby" style="width: auto;">
-                    <option value="ID">ID</option>
-                    <option value="Name">Tên Món Ăn</option>
-                </select>
-                <select class="form-select me-2" name="order" style="width: auto;">
-                    <option value="asc">Tăng dần</option>
-                    <option value="desc">Giảm dần</option>
-                </select>
-                <button class="btn btn-custom-secondary" type="submit">Sắp xếp</button>
-            </form>
-            <div class="d-flex align-items-center">
-                <c:choose>
-                    <c:when test="${empty sessionScope.admin && empty sessionScope.user}">
-                        <a href="${pageContext.request.contextPath}/login" class="btn btn-custom-primary me-2">Đăng nhập</a>
-                        <a href="${pageContext.request.contextPath}/register" class="btn btn-custom-secondary">Đăng ký</a>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="dropdown">
-                            <button class="btn btn-custom-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    ${not empty sessionScope.admin ? sessionScope.admin : sessionScope.user}
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <c:if test="${not empty sessionScope.admin}">
-                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/recipes?action=create">Thêm Công Thức Mới</a></li>
-                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/recipes?action=approveSuggestedRecipes">Duyệt Công Thức Đề Xuất</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                </c:if>
-                                <c:if test="${not empty sessionScope.user}">
-                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/recipes?action=suggestRecipe">Đề Xuất Công Thức</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                </c:if>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
-                            </ul>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
+        <div class="navbar-nav ms-auto">
+            <c:choose>
+                <c:when test="${empty sessionScope.admin && empty sessionScope.user}">
+                    <a href="${pageContext.request.contextPath}/login" class="btn btn-custom-primary me-2">Đăng nhập</a>
+                    <a href="${pageContext.request.contextPath}/register" class="btn btn-custom-secondary">Đăng ký</a>
+                </c:when>
+                <c:otherwise>
+                    <div class="dropdown">
+                        <button class="btn btn-custom-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                ${not empty sessionScope.admin ? sessionScope.admin : sessionScope.user}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <c:if test="${not empty sessionScope.admin}">
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/recipes?action=create">Thêm Công Thức Mới</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/recipes?action=approveSuggestedRecipes">Duyệt Công Thức Đề Xuất</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                            </c:if>
+                            <c:if test="${not empty sessionScope.user}">
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/recipes?action=suggestRecipe">Đề Xuất Công Thức</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                            </c:if>
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
     </div>
 </nav>
 
 <div class="container-fluid mt-4">
-    <h2 class="text-center mb-4" style="color: #FF5722;">Danh sách Công Thức Nấu Ăn</h2>
+    <h1 class="text-center mb-4" style="color: #FF5722;">Danh sách Công Thức Nấu Ăn</h1>
+
+    <div class="form-container">
+        <form action="${pageContext.request.contextPath}/recipes" method="get">
+            <span class="me-2">Tìm kiếm</span>
+            <select class="form-select me-2" name="searchtype" style="width: auto;">
+                <option value="id">ID</option>
+                <option value="name">Tên Món Ăn</option>
+                <option value="ingredient">Nguyên Liệu</option>
+            </select>
+            <input class="form-control me-2" type="search" placeholder="Nhập từ khóa" name="keyword" style="width: auto;">
+            <button class="btn btn-custom-primary" type="submit">Tìm</button>
+        </form>
+        <form action="${pageContext.request.contextPath}/recipes" method="get">
+            <span class="me-2">Sắp xếp</span>
+            <select class="form-select me-2" name="sortby" style="width: auto;">
+                <option value="ID">ID</option>
+                <option value="Name">Tên Món Ăn</option>
+            </select>
+            <select class="form-select me-2" name="order" style="width: auto;">
+                <option value="asc">Tăng dần</option>
+                <option value="desc">Giảm dần</option>
+            </select>
+            <button class="btn btn-custom-secondary" type="submit">Sắp xếp</button>
+        </form>
+    </div>
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
