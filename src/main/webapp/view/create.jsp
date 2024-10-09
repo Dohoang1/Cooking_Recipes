@@ -4,6 +4,7 @@
 <head>
     <title>Thêm Công Thức Nấu Ăn</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #FFF5E6;
@@ -34,6 +35,10 @@
         .form-control {
             border-radius: 5px;
         }
+        .pacifico-font {
+            font-family: 'Pacifico', cursive;
+        }
+
     </style>
 </head>
 <body>
@@ -46,7 +51,7 @@
 </nav>
 
 <div class="container mt-5">
-    <h1 class="text-center mb-4" style="color: #FF5722;">Thêm Công Thức Nấu Ăn Mới</h1>
+    <h1 class="pacifico-font text-center mb-4" style="color: #FF5722;">Thêm Công Thức Nấu Ăn Mới</h1>
     <div class="text-center mb-4">
         <a href="recipes?action=recipes" class="btn btn-custom-primary">Quay Lại Danh Sách</a>
     </div>

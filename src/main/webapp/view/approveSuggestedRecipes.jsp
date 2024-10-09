@@ -4,6 +4,7 @@
 <head>
     <title>Duyệt Công Thức Đề Xuất</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #FFF5E6;
@@ -42,6 +43,10 @@
             background-color: #FF9800;
             color: white;
         }
+
+        .pacifico-font {
+            font-family: 'Pacifico', cursive;
+        }
     </style>
 </head>
 <body>
@@ -54,7 +59,7 @@
 </nav>
 
 <div class="container mt-5">
-    <h1 class="text-center mb-4" style="color: #FF5722;">Duyệt Công Thức Đề Xuất</h1>
+    <h1 class="pacifico-font text-center mb-4" style="color: #FF5722;">Duyệt Công Thức Đề Xuất</h1>
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
@@ -78,7 +83,7 @@
                             <button type="submit" name="status" value="approved" class="btn btn-custom-primary btn-sm">Duyệt</button>
                             <button type="submit" name="status" value="rejected" class="btn btn-custom-secondary btn-sm">Từ Chối</button>
                         </form>
-                        <a href="${pageContext.request.contextPath}/recipes?action=details&id=${recipe.id}" class="btn btn-sm btn-info">Chi Tiết</a>
+                        <a href="${pageContext.request.contextPath}/recipes?action=details&id=${recipe.id}&type=suggested" class="btn btn-sm btn-info">Chi Tiết</a>
                     </td>
                 </tr>
             </c:forEach>

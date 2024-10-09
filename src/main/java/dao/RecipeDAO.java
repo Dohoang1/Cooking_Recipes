@@ -22,7 +22,7 @@ public class RecipeDAO {
     private static final String SORT_ALL_RECIPES_BY_NAME = "SELECT * FROM recipes ORDER BY name";
     private static final String SORT_ALL_RECIPES_BY_ID = "SELECT * FROM recipes ORDER BY id";
     private static final String SELECT_ALL_RECIPES_BY_INGREDIENT = "SELECT * FROM recipes WHERE ingredient LIKE ?";
-    private static final String INSERT_SUGGESTED_RECIPE_SQL = "INSERT INTO suggested_recipes (name, cooktime, ingredient, inscription, image, suggested_by, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_SUGGESTED_RECIPE_SQL = "INSERT INTO suggested_recipes (id, name, cooktime, ingredient, inscription, image, suggested_by, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_ALL_SUGGESTED_RECIPES = "SELECT * FROM suggested_recipes WHERE status = 'pending'";
     private static final String UPDATE_SUGGESTED_RECIPE_STATUS = "UPDATE suggested_recipes SET status = ? WHERE id = ?";
     private static final String SELECT_SUGGESTED_RECIPE_BY_ID = "SELECT * FROM suggested_recipes WHERE id = ?";
@@ -226,15 +226,17 @@ public class RecipeDAO {
     }
 
     public void insertSuggestedRecipe(SuggestedRecipe recipe) throws SQLException {
+        int newId = getMaxRecipeId() + 1;
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SUGGESTED_RECIPE_SQL)) {
-            preparedStatement.setString(1, recipe.getName());
-            preparedStatement.setString(2, recipe.getCooktime());
-            preparedStatement.setString(3, recipe.getIngredient());
-            preparedStatement.setString(4, recipe.getInscription());
-            preparedStatement.setString(5, recipe.getImage());
-            preparedStatement.setString(6, recipe.getSuggestedBy());
-            preparedStatement.setString(7, recipe.getStatus());
+            preparedStatement.setInt(1, newId);
+            preparedStatement.setString(2, recipe.getName());
+            preparedStatement.setString(3, recipe.getCooktime());
+            preparedStatement.setString(4, recipe.getIngredient());
+            preparedStatement.setString(5, recipe.getInscription());
+            preparedStatement.setString(6, recipe.getImage());
+            preparedStatement.setString(7, recipe.getSuggestedBy());
+            preparedStatement.setString(8, recipe.getStatus());
             preparedStatement.executeUpdate();
         }
     }
@@ -291,6 +293,17 @@ public class RecipeDAO {
         return recipe;
     }
 
+    public int getMaxRecipeId() throws SQLException {
+        String sql = "SELECT MAX(id) as max_id FROM recipes";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("max_id");
+            }
+        }
+        return 0;
+    }
 
     private void printSQLException(SQLException ex) {
         for (Throwable e : ex) {

@@ -3,6 +3,8 @@
 <head>
     <title>Đăng Nhập</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
     <style>
         body {
             background-color: #FFF5E6;
@@ -27,6 +29,9 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
+        .pacifico-font {
+            font-family: 'Pacifico', cursive;
+        }
     </style>
 </head>
 <body>
@@ -42,7 +47,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="login-form">
-                <h2 class="text-center mb-4" style="color: #FF5722;">Đăng Nhập</h2>
+                <h2 class="pacifico-font text-center mb-4" style="color: #FF5722;">Đăng Nhập</h2>
                 <% if(request.getAttribute("successMessage") != null) { %>
                 <div class="alert alert-success" role="alert">
                     <%= request.getAttribute("successMessage") %>

@@ -4,6 +4,7 @@
 <head>
     <title>Chi Tiết Công Thức</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #FFF5E6;
@@ -35,6 +36,9 @@
             white-space: pre-wrap;
             overflow-y: auto;
         }
+        .pacifico-font {
+            font-family: 'Pacifico', cursive;
+        }
     </style>
 </head>
 <body>
@@ -47,7 +51,7 @@
 </nav>
 
 <div class="container mt-5">
-    <h1 class="text-center mb-4" style="color: #FF5722;">Chi Tiết Công Thức</h1>
+    <h1 class="pacifico-font text-center mb-4" style="color: #FF5722;">Chi Tiết Công Thức</h1>
     <c:if test="${not empty recipe}">
         <div class="card">
             <div class="card-header">
@@ -63,6 +67,11 @@
                 <p class="border rounded p-2 bg-light"><c:out value="${recipe.inscription}"/></p>
 
                 <img src="<c:out value='${recipe.image}'/>" alt="Recipe Image" class="img-fluid rounded shadow mt-3"/>
+
+                <c:if test="${isSuggested}">
+                    <p class="mt-3"><strong>Đề xuất bởi:</strong> <c:out value="${recipe.suggestedBy}"/></p>
+                    <p><strong>Trạng thái:</strong> <c:out value="${recipe.status}"/></p>
+                </c:if>
             </div>
         </div>
     </c:if>

@@ -4,6 +4,7 @@
 <head>
     <title>Công Thức Nấu Ăn</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #FFF5E6;
@@ -95,6 +96,9 @@
                 margin-bottom: 10px;
             }
         }
+        .pacifico-font {
+            font-family: 'Pacifico', cursive;
+        }
     </style>
 </head>
 <body>
@@ -134,7 +138,7 @@
 </nav>
 
 <div class="container-fluid mt-4">
-    <h1 class="text-center mb-4" style="color: #FF5722;">Danh sách Công Thức Nấu Ăn</h1>
+    <h1 class="pacifico-font text-center mb-5" style="color: #FF5722;">Danh sách Công Thức Nấu Ăn</h1>
 
     <div class="form-container">
         <form action="${pageContext.request.contextPath}/recipes" method="get">
@@ -164,14 +168,14 @@
         <table class="table table-hover">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>Tên Món Ăn</th>
-                <th>Thời Gian</th>
-                <th>Nguyên Liệu</th>
-                <th>Mô Tả</th>
-                <th>Ảnh</th>
+                <th width="2%">ID</th>
+                <th width="10%">Tên Món Ăn</th>
+                <th width="7%">Thời Gian</th>
+                <th width="25%">Nguyên Liệu</th>
+                <th width="40%">Mô Tả</th>
+                <th width="10%">Ảnh</th>
                 <c:if test="${not empty sessionScope.admin || not empty sessionScope.user}">
-                    <th>Thao Tác</th>
+                    <th width="7%">Thao Tác</th>
                 </c:if>
             </tr>
             </thead>
@@ -190,7 +194,7 @@
                         <td>
                             <a href="${pageContext.request.contextPath}/recipes?action=edit&id=${recipe.id}" class="btn btn-sm btn-custom-primary">Sửa</a>
                             <a href="${pageContext.request.contextPath}/recipes?action=delete&id=${recipe.id}" class="btn btn-sm btn-custom-secondary" onclick="return confirm('Bạn có chắc chắn muốn xóa công thức này?')">Xóa</a>
-                            <a href="${pageContext.request.contextPath}/recipes?action=details&id=${recipe.id}" class="btn btn-sm btn-info">Chi Tiết</a>
+                            <a href="${pageContext.request.contextPath}/recipes?action=details&id=${recipe.id}&type=recipe" class="btn btn-sm btn-info">Chi Tiết</a>
                         </td>
                     </c:if>
                     <c:if test="${not empty sessionScope.user}">

@@ -238,7 +238,15 @@ public class RecipeServlet extends HttpServlet {
         String image = request.getParameter("image");
         String suggestedBy = (String) request.getSession().getAttribute("user");
 
-        SuggestedRecipe newRecipe = new SuggestedRecipe(name, cooktime, ingredient, inscription, image, suggestedBy);
+        SuggestedRecipe newRecipe = new SuggestedRecipe();
+        newRecipe.setName(name);
+        newRecipe.setCooktime(cooktime);
+        newRecipe.setIngredient(ingredient);
+        newRecipe.setInscription(inscription);
+        newRecipe.setImage(image);
+        newRecipe.setSuggestedBy(suggestedBy);
+        newRecipe.setStatus("pending");
+
         recipeDAO.insertSuggestedRecipe(newRecipe);
         response.sendRedirect("recipes");
     }
@@ -254,8 +262,18 @@ public class RecipeServlet extends HttpServlet {
     private void showRecipeDetails(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        Recipe recipe = recipeDAO.selectRecipe(id);
-        request.setAttribute("recipe", recipe);
+        String type = request.getParameter("type");
+
+        if ("suggested".equals(type)) {
+            SuggestedRecipe recipe = recipeDAO.selectSuggestedRecipe(id);
+            request.setAttribute("recipe", recipe);
+            request.setAttribute("isSuggested", true);
+        } else {
+            Recipe recipe = recipeDAO.selectRecipe(id);
+            request.setAttribute("recipe", recipe);
+            request.setAttribute("isSuggested", false);
+        }
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("view/recipeDetails.jsp");
         dispatcher.forward(request, response);
     }
