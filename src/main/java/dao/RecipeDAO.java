@@ -293,6 +293,16 @@ public class RecipeDAO {
         return recipe;
     }
 
+    public boolean deleteSuggestedRecipe(int id) throws SQLException {
+        String sql = "DELETE FROM suggested_recipes WHERE id = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            int affectedRows = statement.executeUpdate();
+            return affectedRows > 0;
+        }
+    }
+
     public int getMaxRecipeId() throws SQLException {
         String sql = "SELECT MAX(id) as max_id FROM recipes";
         try (Connection connection = getConnection();

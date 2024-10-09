@@ -290,8 +290,7 @@ public class RecipeServlet extends HttpServlet {
                         suggestedRecipe.getIngredient(), suggestedRecipe.getInscription(), suggestedRecipe.getImage());
                 recipeDAO.insertRecipe(newRecipe);
             }
-
-            recipeDAO.updateSuggestedRecipeStatus(id, status);
+            recipeDAO.deleteSuggestedRecipe(id);
         }
         response.sendRedirect("recipes?action=approveSuggestedRecipes");
     }
