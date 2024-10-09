@@ -24,7 +24,6 @@ public class RecipeDAO {
     private static final String SELECT_ALL_RECIPES_BY_INGREDIENT = "SELECT * FROM recipes WHERE ingredient LIKE ?";
     private static final String INSERT_SUGGESTED_RECIPE_SQL = "INSERT INTO suggested_recipes (id, name, cooktime, ingredient, inscription, image, suggested_by, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_ALL_SUGGESTED_RECIPES = "SELECT * FROM suggested_recipes WHERE status = 'pending'";
-    private static final String UPDATE_SUGGESTED_RECIPE_STATUS = "UPDATE suggested_recipes SET status = ? WHERE id = ?";
     private static final String SELECT_SUGGESTED_RECIPE_BY_ID = "SELECT * FROM suggested_recipes WHERE id = ?";
 
     public RecipeDAO() {
@@ -260,15 +259,6 @@ public class RecipeDAO {
             }
         }
         return suggestedRecipes;
-    }
-
-    public boolean updateSuggestedRecipeStatus(int id, String status) throws SQLException {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_SUGGESTED_RECIPE_STATUS)) {
-            statement.setString(1, status);
-            statement.setInt(2, id);
-            return statement.executeUpdate() > 0;
-        }
     }
 
     public SuggestedRecipe selectSuggestedRecipe(int id) throws SQLException {
